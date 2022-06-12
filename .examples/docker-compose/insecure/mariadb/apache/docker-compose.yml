@@ -20,7 +20,7 @@ services:
     image: nextcloud:apache
     restart: always
     ports:
-      - 127.0.0.1:9999:80
+      - 0.0.0.0:9999:80
     volumes:
       - nextcloud:/var/www/html
     environment:
