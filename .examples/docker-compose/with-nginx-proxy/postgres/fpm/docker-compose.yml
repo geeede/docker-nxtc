@@ -1,15 +1,15 @@
 version: '3'
 
 services:
-  db:
+  next-db:
     image: postgres:alpine
     restart: always
     volumes:
-      - db:/var/lib/postgresql/data
+      - next-db:/var/lib/postgresql/data
     env_file:
       - db.env
 
-  redis:
+  next-redis:
     image: redis:alpine
     restart: always
 
@@ -19,15 +19,15 @@ services:
     volumes:
       - nextcloud:/var/www/html
     environment:
-      - POSTGRES_HOST=db
-      - REDIS_HOST=redis
+      - POSTGRES_HOST=next-db
+      - REDIS_HOST=next-redis
     env_file:
       - db.env
     depends_on:
-      - db
-      - redis
+      - next-db
+      - next-redis
 
-  web:
+  next-web:
     build: ./web
     restart: always
     volumes:
@@ -49,8 +49,8 @@ services:
       - nextcloud:/var/www/html
     entrypoint: /cron.sh
     depends_on:
-      - db
-      - redis
+      - next-db
+      - next-redis
 
   proxy:
     build: ./proxy
@@ -98,7 +98,7 @@ services:
 #      - proxy-tier
 
 volumes:
-  db:
+  next-db:
   nextcloud:
   certs:
   acme:
